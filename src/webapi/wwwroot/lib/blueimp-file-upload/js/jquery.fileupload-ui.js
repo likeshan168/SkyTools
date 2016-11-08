@@ -368,6 +368,8 @@
             },
             // Callback for file deletion:
             destroy: function (e, data) {
+                console.log(data);
+                console.log(e.isDefaultPrevented());
                 if (e.isDefaultPrevented()) {
                     return false;
                 }

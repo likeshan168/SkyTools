@@ -21,7 +21,7 @@ namespace webapi.Bussiness
         {
             _stopwatch?.Start();
             await _next(context);
-            await context.Response.WriteAsync($"<div>共耗时：{_stopwatch.ElapsedMilliseconds}</div>");
+            //await context.Response.WriteAsync($"<div>共耗时：{_stopwatch.ElapsedMilliseconds}</div>");
         }
     }
 }

@@ -17,6 +17,5 @@ namespace webapi.Controllers
             return View();
         }
 
-        
     }
 }

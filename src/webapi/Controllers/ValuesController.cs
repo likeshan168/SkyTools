@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.NodeServices;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
+using System.ServiceModel.Channels;
 
 namespace webapi.Controllers
 {
@@ -19,6 +23,11 @@ namespace webapi.Controllers
         //    return new string[] { "value1", "value2" };
         //}
 
+        private IHostingEnvironment _environment;
+        public ValuesController(IHostingEnvironment environment)
+        {
+            _environment = environment;
+        }
         // GET api/values/5
         [HttpGet("{id}")]
         public string Get(int id)
@@ -28,36 +37,34 @@ namespace webapi.Controllers
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody]string value)
+        public async Task<IActionResult> Post(ICollection<IFormFile> files)
         {
-            f(!Request.Content.IsMimeMultipartContent())
+            var uploadedFiles = Request.Form.Files;
+            var uploads = Path.Combine(_environment.WebRootPath, "Uploads");
+            foreach (var file in uploadedFiles)
             {
-                throw new HttpResponseException(HttpStatusCode.UnsupportedMediaType);
-            }
-            Dictionary<string, string> dic = new Dictionary<string, string>();
-            string root = HttpContext.Current.Server.MapPath("~/App_Data");//指定要将文件存入的服务器物理位置  
-            var provider = new MultipartFormDataStreamProvider(root);
-            try
-            {
-                // Read the form data.  
-                await Request.Content.ReadAsMultipartAsync(provider);
-
-                // This illustrates how to get the file names.  
-                foreach (MultipartFileData file in provider.FileData)
-                {//接收文件  
-                    Trace.WriteLine(file.Headers.ContentDisposition.FileName);//获取上传文件实际的文件名  
-                    Trace.WriteLine("Server file path: " + file.LocalFileName);//获取上传文件在服务上默认的文件名  
-                }//TODO:这样做直接就将文件存到了指定目录下，暂时不知道如何实现只接收文件数据流但并不保存至服务器的目录下，由开发自行指定如何存储，比如通过服务存到图片服务器  
-                foreach (var key in provider.FormData.AllKeys)
-                {//接收FormData  
-                    dic.Add(key, provider.FormData[key]);
+                if (file.Length > 0)
+                {
+                    using (var fileStream = new FileStream(Path.Combine(uploads, file.FileName), FileMode.Create))
+                    {
+                        await file.CopyToAsync(fileStream);
+                    }
                 }
             }
-            catch
+
+            var obj = new
             {
-                throw;
-            }
-            return dic;
+                files = uploadedFiles.Select(f =>
+                new
+                {
+                    thumbnailUrl = $"/Uploads/{f.FileName}",
+                    url = $"/Uploads/{f.FileName}",
+                    name = f.FileName,
+                    size = f.Length,
+                    deleteUrl ="/api/values"
+                })
+            };
+            return Json(obj);
         }
 
         // PUT api/values/5
@@ -68,11 +75,11 @@ namespace webapi.Controllers
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public void Delete(int id,[FromBody]string fileName)
         {
         }
         [HttpGet]
-        
+
         public async Task<IActionResult> Get([FromServices]INodeServices nodeServices)
         {
             var result = await nodeServices.InvokeAsync<int>("./nodejs/addNumbers", 1, 2);
