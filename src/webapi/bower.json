@@ -1,0 +1,10 @@
+{
+  "name": "asp.net",
+  "private": true,
+  "dependencies": {
+    "jquery": "^3.1.1",
+    "bootstrap": "^3.3.7",
+    "blueimp-file-upload": "jQuery-File-Upload#^9.14.0",
+    "jquery-ui": "jquery.ui#^1.12.1"
+  }
+}
