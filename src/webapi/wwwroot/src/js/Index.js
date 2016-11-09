@@ -43,4 +43,26 @@ $(function () {
     });
 
 
+    $("#search").keydown(function (e) {
+        var obj = $(this);
+        let active = $("#navbar>li.active>a").text();
+        var url = "";
+        if (active === "") {
+            url = "/api/values/" + obj.val();
+        }
+        else {
+            url = "/api/Products/" + obj.val();
+        }
+        
+        //$.ajax({
+        //    url:url
+        //}).done(function (data) {
+        //    console.log(data);
+        //}).fail(function (jqxhr,textStatus) {
+
+        //});
+
+        $("#startUpload").data("search", true).click();
+    })
+
 });

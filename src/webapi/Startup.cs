@@ -30,7 +30,8 @@ namespace webapi
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            services.AddTransient<Stopwatch>();
+            //services.AddTransient<Stopwatch>();
+            services.AddMemoryCache();
             services.AddNodeServices();
             services.AddMvc();
         }
@@ -41,7 +42,7 @@ namespace webapi
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            app.UseMiddleware<TimeMiddleware>();
+            //app.UseMiddleware<TimeMiddleware>();
             app.UseStaticFiles();
 
             app.UseMvc((routes) =>

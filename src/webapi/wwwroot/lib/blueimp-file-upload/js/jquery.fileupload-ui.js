@@ -12,7 +12,7 @@
 /* jshint nomen:false */
 /* global define, require, window */
 
-;(function (factory) {
+; (function (factory) {
     'use strict';
     if (typeof define === 'function' && define.amd) {
         // Register as an anonymous AMD module:
@@ -140,6 +140,7 @@
             },
             // Callback for the start of each file upload request:
             send: function (e, data) {
+                console.log(e.data('search'));
                 if (e.isDefaultPrevented()) {
                     return false;
                 }
@@ -177,7 +178,7 @@
                 if (data.context) {
                     data.context.each(function (index) {
                         var file = files[index] ||
-                                {error: 'Empty file upload result'};
+                                { error: 'Empty file upload result' };
                         deferred = that._addFinishedDeferreds();
                         that._transition($(this)).done(
                             function () {
@@ -368,14 +369,13 @@
             },
             // Callback for file deletion:
             destroy: function (e, data) {
-                console.log(data);
-                console.log(e.isDefaultPrevented());
                 if (e.isDefaultPrevented()) {
                     return false;
                 }
                 var that = $(this).data('blueimp-fileupload') ||
                         $(this).data('fileupload'),
                     removeNode = function () {
+                        console.log("remove");
                         that._transition(data.context).done(
                             function () {
                                 $(this).remove();
@@ -385,8 +385,22 @@
                     };
                 if (data.url) {
                     data.dataType = data.dataType || that.options.dataType;
-                    $.ajax(data).done(removeNode).fail(function () {
-                        that._trigger('destroyfailed', e, data);
+                    console.log(data);
+                    $.ajax({
+                        type: "DELETE",
+                        data: {
+                            name: data.name
+                        },
+                        dataType: 'json',
+                        url: data.url + '?name=' + data.name,
+                        success: function () {
+                            console.log("remove");
+                            removeNode();
+                        },
+                        error: function () {
+                            console.log("error");
+                            that._trigger('destroyfailed', e, data);
+                        }
                     });
                 } else {
                     removeNode();
@@ -423,7 +437,7 @@
                         'DownloadURL',
                         [type, name, url].join(':')
                     );
-                } catch (ignore) {}
+                } catch (ignore) { }
             });
         },
 

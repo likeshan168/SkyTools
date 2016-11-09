@@ -37,8 +37,13 @@
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <form class="navbar-form navbar-right">
-                    <input type="text" class="form-control" placeholder="Search...">
+                    <input type="text" class="form-control input-lg" id="search" placeholder="Search...">
+                    
                 </form>
+
+                <button class="btn btn-primary start" id="btnSearch" style="visibility:hidden">
+                    Start
+                </button>
             </div>
         </div>
     </nav>
@@ -46,7 +51,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-3 col-md-2 sidebar">
-                <ul class="nav nav-sidebar">
+                <ul class="nav nav-sidebar" id="navbar">
 
                     <li role="presentation" class="active"><a href="#home" role="tab" data-toggle="tab">基本资料</a></li>
                     <li role="presentation"><a href="#uploadExcel" role="tab" data-toggle="tab">上传数据</a></li>
@@ -70,11 +75,11 @@
                         </table>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="uploadExcel">
-                            <!-- The file upload form used as target for the file upload widget -->
+                        <!-- The file upload form used as target for the file upload widget -->
                         <div class="container">
-                      
-                           
-               
+
+
+
                             <!-- The file upload form used as target for the file upload widget -->
                             <form id="fileupload" action="//jquery-file-upload.appspot.com/" method="POST" enctype="multipart/form-data">
                                 <!-- Redirect browsers with JavaScript disabled to the origin page -->
@@ -88,7 +93,7 @@
                                             <span>Add files...</span>
                                             <input type="file" name="files[]" multiple>
                                         </span>
-                                        <button type="submit" class="btn btn-primary start">
+                                        <button type="submit" id="startUpload" class="btn btn-primary start">
                                             <i class="glyphicon glyphicon-upload"></i>
                                             <span>Start upload</span>
                                         </button>
@@ -117,11 +122,11 @@
                                 <!-- The table listing the files available for upload/download -->
                                 <table role="presentation" class="table table-striped"><tbody class="files"></tbody></table>
                             </form>
-                    
-                
+
+
                         </div>
-                       
-                    
+
+
                     </div>
                     <div role="tabpanel" class="tab-pane" id="printLabel">打印标签</div>
                 </div>
@@ -228,7 +233,7 @@
             </td>
             <td>
                 {% if (file.deleteUrl) { %}
-                <button class="btn btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}" {% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}' {% } %}>
+                <button class="btn btn-danger delete" data-name="{%=file.name%}" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}" {% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}' {% } %}>
                     <i class="glyphicon glyphicon-trash"></i>
                     <span>Delete</span>
                 </button>
@@ -243,6 +248,6 @@
         </tr>
         {% } %}
     </script>
-   
+
 </body>
 </html>

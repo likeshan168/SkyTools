@@ -10,73 +10,126 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using System.ServiceModel.Channels;
+using Microsoft.Extensions.Primitives;
+using Microsoft.Extensions.Caching.Memory;
+using webapi.Bussiness;
 
 namespace webapi.Controllers
 {
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
-        // GET api/values
-        //[HttpGet]
-        //public IEnumerable<string> Get()
-        //{
-        //    return new string[] { "value1", "value2" };
-        //}
+
+        private string UploadFolders = "Uploads";
 
         private IHostingEnvironment _environment;
-        public ValuesController(IHostingEnvironment environment)
+        private IMemoryCache _caching;
+        public ValuesController(IHostingEnvironment environment, IMemoryCache caching)
         {
             _environment = environment;
-        }
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
+            _caching = caching;
         }
 
+        [HttpGet("{fileName}")]
+        public JsonResult Post(string fileName)
+        {
+            List<ResponseFile> responseFiles;
+            if (!_caching.TryGetValue("fileNames", out responseFiles))
+            {
+
+                var uploads = Path.Combine(_environment.WebRootPath, UploadFolders);
+                //System.IO.File
+                DirectoryInfo di = new DirectoryInfo(uploads);
+                var files = di.GetFiles();
+                responseFiles = new List<ResponseFile>();
+                foreach (FileInfo file in files)
+                {
+                    responseFiles.Add(new ResponseFile()
+                    {
+                        Name = file.Name,
+                        Size = file.Length,
+                        Url = GetFileUrl(file.Name),
+                        ThumbnailUrl = GetThumbnailUrl(file.Name),
+                        DeleteUrl = "/api/values",
+                        DeleteType = "DELETE"
+                    });
+                }
+
+                _caching.Set("fileNames", responseFiles);
+            }
+
+            return Json(responseFiles.Select(f => f.Name == fileName));
+        }
         // POST api/values
         [HttpPost]
         public async Task<IActionResult> Post(ICollection<IFormFile> files)
         {
-            var uploadedFiles = Request.Form.Files;
-            var uploads = Path.Combine(_environment.WebRootPath, "Uploads");
-            foreach (var file in uploadedFiles)
+            try
             {
-                if (file.Length > 0)
+                var uploadedFiles = Request.Form.Files;
+                var uploads = Path.Combine(_environment.WebRootPath, UploadFolders);
+                foreach (var file in uploadedFiles)
                 {
-                    using (var fileStream = new FileStream(Path.Combine(uploads, file.FileName), FileMode.Create))
+                    if (file.Length > 0)
                     {
-                        await file.CopyToAsync(fileStream);
+                        using (var fileStream = new FileStream(Path.Combine(uploads, file.FileName), FileMode.Create))
+                        {
+                            await file.CopyToAsync(fileStream);
+                        }
                     }
                 }
-            }
 
-            var obj = new
-            {
-                files = uploadedFiles.Select(f =>
-                new
+                var obj = new
                 {
-                    thumbnailUrl = $"/Uploads/{f.FileName}",
-                    url = $"/Uploads/{f.FileName}",
-                    name = f.FileName,
-                    size = f.Length,
-                    deleteUrl ="/api/values"
-                })
-            };
-            return Json(obj);
-        }
-
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
+                    files = uploadedFiles.Select(f =>
+                    new ResponseFile
+                    {
+                        ThumbnailUrl = GetThumbnailUrl(f.FileName),
+                        Url = GetFileUrl(f.FileName),
+                        Name = f.FileName,
+                        Size = f.Length,
+                        DeleteUrl = "/api/values",
+                        DeleteType = "DELETE",
+                        Error = ""
+                    })
+                };
+                return Json(obj);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id,[FromBody]string fileName)
+        [HttpDelete]
+        public ActionResult Delete(string fileName)
         {
+            try
+            {
+                StringValues files;
+                var frm = Request.Form.TryGetValue("name", out files);
+                if (files.Count > 0)
+                {
+                    string path = Path.Combine(_environment.WebRootPath, UploadFolders);
+                    foreach (var item in files)
+                    {
+                        path = Path.Combine(path, item);
+                        FileInfo fi = new FileInfo(path);
+                        if (fi.Exists)
+                            fi.Delete();
+                        fi = null;
+                    }
+                }
+
+                return Json(new { result = "success" });
+            }
+            catch (Exception ex)
+            {
+
+                return new InternalServerErrorResult();
+            }
+
         }
         [HttpGet]
 
@@ -84,6 +137,16 @@ namespace webapi.Controllers
         {
             var result = await nodeServices.InvokeAsync<int>("./nodejs/addNumbers", 1, 2);
             return Content("1 + 2 =" + result);
+        }
+
+        private string GetFileUrl(string fileName)
+        {
+            return $"/{UploadFolders}/{fileName}";
+        }
+
+        private string GetThumbnailUrl(string fileName)
+        {
+            return (Path.GetExtension(fileName) == ".xls" || Path.GetExtension(fileName) == ".xlsx") ? $"/src/images/excel.png" : $"/{UploadFolders}/{fileName}";
         }
     }
 }
