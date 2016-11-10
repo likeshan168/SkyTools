@@ -24,6 +24,7 @@ namespace webapi.Controllers
 
         private IHostingEnvironment _environment;
         private IMemoryCache _caching;
+        private string FileNamesKey = "fileNames";
         public ValuesController(IHostingEnvironment environment, IMemoryCache caching)
         {
             _environment = environment;
@@ -31,10 +32,10 @@ namespace webapi.Controllers
         }
 
         [HttpGet("{fileName}")]
-        public JsonResult Post(string fileName)
+        public JsonResult Get(string fileName)
         {
             List<ResponseFile> responseFiles;
-            if (!_caching.TryGetValue("fileNames", out responseFiles))
+            if (!_caching.TryGetValue(FileNamesKey, out responseFiles))
             {
 
                 var uploads = Path.Combine(_environment.WebRootPath, UploadFolders);
@@ -51,14 +52,16 @@ namespace webapi.Controllers
                         Url = GetFileUrl(file.Name),
                         ThumbnailUrl = GetThumbnailUrl(file.Name),
                         DeleteUrl = "/api/values",
-                        DeleteType = "DELETE"
+                        DeleteType = "DELETE",
+                        IsExcel = IsExcelFile(file.Name)
                     });
                 }
 
-                _caching.Set("fileNames", responseFiles);
+                _caching.Set(FileNamesKey, responseFiles);
             }
 
-            return Json(responseFiles.Select(f => f.Name == fileName));
+            var results = responseFiles.Where(f => f.Name.Contains(fileName));
+            return Json(results);
         }
         // POST api/values
         [HttpPost]
@@ -90,9 +93,11 @@ namespace webapi.Controllers
                         Size = f.Length,
                         DeleteUrl = "/api/values",
                         DeleteType = "DELETE",
-                        Error = ""
+                        Error = "",
+                        IsExcel = IsExcelFile(f.FileName)
                     })
                 };
+                _caching.Remove(FileNamesKey);
                 return Json(obj);
             }
             catch (Exception ex)
@@ -121,7 +126,7 @@ namespace webapi.Controllers
                         fi = null;
                     }
                 }
-
+                _caching.Remove(FileNamesKey);
                 return Json(new { result = "success" });
             }
             catch (Exception ex)
@@ -133,11 +138,11 @@ namespace webapi.Controllers
         }
         [HttpGet]
 
-        public async Task<IActionResult> Get([FromServices]INodeServices nodeServices)
-        {
-            var result = await nodeServices.InvokeAsync<int>("./nodejs/addNumbers", 1, 2);
-            return Content("1 + 2 =" + result);
-        }
+        //public async Task<IActionResult> Get([FromServices]INodeServices nodeServices)
+        //{
+        //    var result = await nodeServices.InvokeAsync<int>("./nodejs/addNumbers", 1, 2);
+        //    return Content("1 + 2 =" + result);
+        //}
 
         private string GetFileUrl(string fileName)
         {
@@ -146,7 +151,12 @@ namespace webapi.Controllers
 
         private string GetThumbnailUrl(string fileName)
         {
-            return (Path.GetExtension(fileName) == ".xls" || Path.GetExtension(fileName) == ".xlsx") ? $"/src/images/excel.png" : $"/{UploadFolders}/{fileName}";
+            return IsExcelFile(fileName) ? $"/src/images/excel.png" : $"/{UploadFolders}/{fileName}";
+        }
+
+        private bool IsExcelFile(string fileName)
+        {
+            return Path.GetExtension(fileName) == ".xls" || Path.GetExtension(fileName) == ".xlsx";
         }
     }
 }

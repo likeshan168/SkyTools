@@ -19,5 +19,7 @@ namespace webapi.Bussiness
         public string DeleteType { get; set; }
 
         public string Error { get; set; }
+
+        public bool IsExcel { get; set; }
     }
 }

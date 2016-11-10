@@ -140,10 +140,11 @@
             },
             // Callback for the start of each file upload request:
             send: function (e, data) {
-                console.log(e.data('search'));
+
                 if (e.isDefaultPrevented()) {
                     return false;
                 }
+
                 var that = $(this).data('blueimp-fileupload') ||
                         $(this).data('fileupload');
                 if (data.context && data.dataType &&
@@ -375,7 +376,6 @@
                 var that = $(this).data('blueimp-fileupload') ||
                         $(this).data('fileupload'),
                     removeNode = function () {
-                        console.log("remove");
                         that._transition(data.context).done(
                             function () {
                                 $(this).remove();
@@ -385,7 +385,6 @@
                     };
                 if (data.url) {
                     data.dataType = data.dataType || that.options.dataType;
-                    console.log(data);
                     $.ajax({
                         type: "DELETE",
                         data: {
@@ -394,7 +393,6 @@
                         dataType: 'json',
                         url: data.url + '?name=' + data.name,
                         success: function () {
-                            console.log("remove");
                             removeNode();
                         },
                         error: function () {
