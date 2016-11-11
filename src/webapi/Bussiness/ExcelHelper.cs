@@ -1,26 +1,30 @@
-﻿using System;
+﻿using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Dapper;
 namespace webapi.Bussiness
 {
     public class ExcelHelper
     {
-        private static readonly ExcelHelper Instance = new ExcelHelper();
-        private const string connStr = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties=&quot;Excel 12.0 Xml;HDR=YES;IMEX=1&quot;";
+        public static readonly ExcelHelper Instance = new ExcelHelper();
+        private const string connStr = "";
         private ExcelHelper()
         {
 
         }
 
-        public IEnumerable<string> GetExcelColumnNames(string filePath)
+        public IEnumerable<string> GetExcelMappedColumns(string connStr)
         {
-            using (IDbConnection conn = new OleDbConnection)
+            using (IDbConnection conn = new SqlConnection(connStr))
             {
-
+                string sql = "SELECT name from syscolumns where id=(select max(id) from sysobjects where xtype='u' and name='ProductInfo')";
+                return conn.Query<string>(sql);
             }
+
         }
     }
 }

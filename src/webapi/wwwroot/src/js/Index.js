@@ -3,9 +3,6 @@
 /// <reference path="../../lib/jquery/dist/jquery.slim.js" />
 /// <reference path="../../lib/jquery/dist/jquery.slim.min.js" />
 
-
-
-
 $(function () {
     'use strict';
 
@@ -26,23 +23,6 @@ $(function () {
             '/cors/result.html?%s'
         )
     );
-
-
-    // Load existing files:
-    //$('#fileupload').addClass('fileupload-processing');
-    //$.ajax({
-    //    // Uncomment the following to send cross-domain cookies:
-    //    //xhrFields: {withCredentials: true},
-    //    url: $('#fileupload').fileupload('option', 'url'),
-    //    dataType: 'json',
-    //    context: $('#fileupload')[0]
-    //}).always(function () {
-    //    $(this).removeClass('fileupload-processing');
-    //}).done(function (result) {
-    //    $(this).fileupload('option', 'done')
-    //        .call(this, $.Event('done'), { result: result });
-    //});
-
 
     $("#search").keyup(function (e) {
         var obj = $(this);
@@ -88,10 +68,12 @@ $(function () {
             }
         });
     })
-    //$('#myModal').modal({show:false});
 
 
-
+    $("#sortable1,#sortable2,#sortable3").sortable({
+        connectWith: ".connectedSortable"
+    }).disableSelection();
+    //$("#sortable2").sortable().disableSelection();
 });
 
 function showDialog(obj) {
@@ -99,6 +81,49 @@ function showDialog(obj) {
     //获取excel的列名
     $.ajax({
         url: "/api/Excel/" + $(obj).data("name"),
+        beforeSend: function () {
+            $("#sortable1").html("<li>获取excel列的信息...</li>");
+            $("#sortable2").html("<li>获取数据库列的信息...</li>");
+        },
+        success: function (data) {
+            if (data) {
+                var html;
+                if (data.excelColumns) {
+                    html = tmpl($("#template-excelColumn").html().toString(), data);
+                    $("#sortable1").html(html);
+                }
+                if (data.dbColumns) {
+                    html = tmpl($("#template-dbColumn").html().toString(), data);
+                    $("#sortable2").html(html);
+                }
+            }
+        },
+        error: function (xhr, statusText) {
+
+        }
+    });
+}
+
+function saveMappedColumns() {
+    var arr1 = new Array();
+    var arr2 = new Array();
+    $("#sortable1").find("li").each(function (index, ele) {
+        arr1.push(ele.innerText);
+    });
+    $("#sortable2").find("li").each(function (index, ele) {
+        arr2.push(ele.innerText);
+    });
+    $.ajax({
+        url: "/api/Excel",
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            dbColumns: arr1,
+            excelColumns: arr2
+        },
+        beforeSend:function(){
+
+        },
         success: function (data) {
             console.log(data);
         },
@@ -106,4 +131,6 @@ function showDialog(obj) {
 
         }
     });
+    console.log(arr1);
+    console.log(arr2);
 }

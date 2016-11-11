@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.NodeServices;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
+using Microsoft.Extensions.Options;
+using webapi.Bussiness;
+using webapi.Models;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -17,10 +20,12 @@ namespace webapi.Controllers
         private INodeServices _nodeServices;
         private IHostingEnvironment _environment;
         private string UploadDir = "Uploads";
-        public ExcelController([FromServices]INodeServices nodeServices, IHostingEnvironment environment)
+        private IOptions<Settings> _settings;
+        public ExcelController([FromServices]INodeServices nodeServices, IHostingEnvironment environment, IOptions<Settings> settings)
         {
             _nodeServices = nodeServices;
             _environment = environment;
+            _settings = settings;
         }
 
         // GET: api/values
@@ -34,16 +39,34 @@ namespace webapi.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id)
         {
-            string filePath = Path.Combine(_environment.WebRootPath, UploadDir, id);
-            var result = await _nodeServices.InvokeAsync<int>("./nodejs/NodeExcel", filePath);
-            return Json(result);
+            try
+            {
+                string filePath = Path.Combine(_environment.WebRootPath, UploadDir, id);
+                var excelColumns = await _nodeServices.InvokeAsync<List<string>>("./nodejs/NodeExcel", filePath);
+                var dbColumns = ExcelHelper.Instance.GetExcelMappedColumns(_settings.Value.DefaultConnection);
+                ColumnMap columns = new ColumnMap() { DbColumns = dbColumns, ExcelColumns = excelColumns };
+                return Json(columns);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
 
         }
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody]string value)
+        public IActionResult Post(ColumnMap columnMaps)
         {
+            try
+            {
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         // PUT api/values/5

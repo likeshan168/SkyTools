@@ -33,6 +33,8 @@ namespace webapi
             //services.AddTransient<Stopwatch>();
             services.AddMemoryCache();
             services.AddNodeServices();
+            services.AddOptions();
+            services.Configure<Settings>(Configuration.GetSection("ConnectionStrings"));
             services.AddMvc();
         }
 
