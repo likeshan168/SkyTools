@@ -86,6 +86,7 @@ function showDialog(obj) {
             $("#sortable2").html("<li>获取数据库列的信息...</li>");
         },
         success: function (data) {
+            console.log(data);
             if (data) {
                 var html;
                 if (data.excelColumns) {
@@ -96,6 +97,8 @@ function showDialog(obj) {
                     html = tmpl($("#template-dbColumn").html().toString(), data);
                     $("#sortable2").html(html);
                 }
+
+                $("#saveMappedColumns").data("excelPath", data.excelPath);
             }
         },
         error: function (xhr, statusText) {
@@ -113,15 +116,17 @@ function saveMappedColumns() {
     $("#sortable2").find("li").each(function (index, ele) {
         arr2.push(ele.innerText);
     });
+    console.log($("#saveMappedColumns").data("excelPath"));
     $.ajax({
         url: "/api/Excel",
         type: 'POST',
         dataType: 'json',
         data: {
-            dbColumns: arr1,
-            excelColumns: arr2
+            dbColumns: arr2,
+            excelColumns: arr1,
+            excelPath: $("#saveMappedColumns").data("excelPath")
         },
-        beforeSend:function(){
+        beforeSend: function () {
 
         },
         success: function (data) {

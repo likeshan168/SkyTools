@@ -37,18 +37,20 @@ namespace webapi.Controllers
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(string id)
+        public IActionResult Get(string id)
         {
             try
             {
                 string filePath = Path.Combine(_environment.WebRootPath, UploadDir, id);
-                var excelColumns = await _nodeServices.InvokeAsync<List<string>>("./nodejs/NodeExcel", filePath);
+                //var excelColumns = await _nodeServices.InvokeAsync<List<string>>("./nodejs/NodeExcel", filePath);
+                var excelColumns = ExcelHelper.Instance.GetExcelColumns(filePath);
                 var dbColumns = ExcelHelper.Instance.GetExcelMappedColumns(_settings.Value.DefaultConnection);
-                ColumnMap columns = new ColumnMap() { DbColumns = dbColumns, ExcelColumns = excelColumns };
+                ColumnMap columns = new ColumnMap() { DbColumns = dbColumns, ExcelColumns = excelColumns,ExcelPath = filePath };
                 return Json(columns);
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return StatusCode(500, ex.Message);
             }
 
@@ -60,7 +62,7 @@ namespace webapi.Controllers
         {
             try
             {
-
+                ExcelHelper.Instance.SaveDataToDb(columnMaps, _settings.Value.DefaultConnection);
                 return Ok();
             }
             catch (Exception ex)

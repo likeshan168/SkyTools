@@ -1,9 +1,9 @@
 {
   "dependencies": {
-    "Microsoft.NETCore.App": {
-      "version": "1.0.1",
-      "type": "platform"
-    },
+    //"Microsoft.NETCore.App": {
+    //  "version": "1.0.1",
+    //  "type": "platform"
+    //},
     "Microsoft.AspNetCore.Mvc": "1.0.1",
     "Microsoft.AspNetCore.Routing": "1.0.1",
     "Microsoft.AspNetCore.Server.IISIntegration": "1.0.0",
@@ -22,7 +22,10 @@
     "Microsoft.AspNetCore.Mvc.WebApiCompatShim": "1.0.1",
     "Microsoft.AspNet.WebApi.Client": "5.2.2",
     "System.ServiceModel.Primitives": "4.0.0",
-    "Microsoft.Extensions.Caching.Abstractions": "1.0.0"
+    "Microsoft.Extensions.Caching.Abstractions": "1.0.0",
+    "Npoi.Mapper": "2.0.7",
+    "NPOI": "2.2.1",
+    "SharpZipLib": "0.86.0"
   },
 
   "tools": {
@@ -30,18 +33,21 @@
   },
 
   "frameworks": {
-    "netcoreapp1.0": {
-      "imports": [
-        "dotnet5.6",
-        "portable-net45+win8"
-      ]
+    "net452": {
+     
     }
+    //"netcoreapp1.0": {
+    //  "imports": [
+    //    "dotnet5.6",
+    //    "portable-net45+win8"
+    //  ]
+    //}
   },
 
   "buildOptions": {
     "emitEntryPoint": true,
     "preserveCompilationContext": true,
-    "debugType": "portable"
+    "debugType": "full"
   },
 
   "runtimeOptions": {
