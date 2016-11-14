@@ -3,9 +3,8 @@
 /// <reference path="../../lib/jquery/dist/jquery.slim.js" />
 /// <reference path="../../lib/jquery/dist/jquery.slim.min.js" />
 
+'use strict';
 $(function () {
-    'use strict';
-
     // Initialize the jQuery File Upload widget:
     $('#fileupload').fileupload({
         // Uncomment the following to send cross-domain cookies:
@@ -26,47 +25,71 @@ $(function () {
 
     $("#search").keyup(function (e) {
         var obj = $(this);
-        if (obj.val() === "") {
+        if ($.trim(obj.val()).length === 0) {
             return;
         }
-        let active = $("#navbar>li.active>a").text();
+        let active = $("#navbar>li.active>a").attr("href");
         var url = "";
-        if (active === "上传文件") {
+        if (active === "#uploadExcel") {
             url = "/api/values/" + obj.val();
+            $.ajax({
+                url: url,
+                type: 'GET',
+                dataType: 'json',
+                success: function (result) {
+
+                    var o = {
+                        files: result,
+                        formatFileSize: function (bytes) {
+                            if (typeof bytes !== 'number') {
+                                return '';
+                            }
+                            if (bytes >= 1000000000) {
+                                return (bytes / 1000000000).toFixed(2) + ' GB';
+                            }
+                            if (bytes >= 1000000) {
+                                return (bytes / 1000000).toFixed(2) + ' MB';
+                            }
+                            return (bytes / 1000).toFixed(2) + ' KB';
+                        }
+                    };
+
+                    var html = tmpl($("#template-search").html().toString(), o);
+                    var obj = $("#searchResults").html(html.toString()).find(".img-thumbnail");
+                    obj.each(function (i, o) {
+                        var ob = $(o);
+                        ob.tooltip({ html: true, title: "<img src='" + ob.attr('src') + "' width='180' height='180'/>", placement: "right" });
+                    });
+
+                },
+                error: function (xhr, statusText) {
+
+                }
+            });
         }
         else {
             url = "/api/Products/" + obj.val();
+            $.ajax({
+                url: url,
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    var html = tmpl($("#template-product").html().toString(), data);
+                    var obj = $("#productInfo").html(html).find(".img-thumbnail");
+                    obj.each(function (i, o) {
+                        var ob = $(o);
+                        ob.tooltip({ html: true, title: "<img src='" + ob.attr('src') + "' width='180' height='180'/>", placement: "right" });
+                    });
+
+                    //$(".img-thumbnail").tooltip({html:true,title: "<img src='"+obj.attr('src')+"' width='180' height='180'/>", placement:"right" });
+                },
+                error: function (xhr, statusText, error) {
+                    console.log(error);
+                }
+            });
         }
 
-        $.ajax({
-            url: url,
-            type: 'GET',
-            dataType: 'json',
-            success: function (result) {
 
-                var o = {
-                    files: result,
-                    formatFileSize: function (bytes) {
-                        if (typeof bytes !== 'number') {
-                            return '';
-                        }
-                        if (bytes >= 1000000000) {
-                            return (bytes / 1000000000).toFixed(2) + ' GB';
-                        }
-                        if (bytes >= 1000000) {
-                            return (bytes / 1000000).toFixed(2) + ' MB';
-                        }
-                        return (bytes / 1000).toFixed(2) + ' KB';
-                    }
-                };
-
-                var html = tmpl($("#template-search").html().toString(), o);
-                $("#searchResults").html(html.toString());
-            },
-            error: function (xhr, statusText) {
-
-            }
-        });
     })
 
 
@@ -86,7 +109,6 @@ function showDialog(obj) {
             $("#sortable2").html("<li>获取数据库列的信息...</li>");
         },
         success: function (data) {
-            console.log(data);
             if (data) {
                 var html;
                 if (data.excelColumns) {
@@ -97,7 +119,7 @@ function showDialog(obj) {
                     html = tmpl($("#template-dbColumn").html().toString(), data);
                     $("#sortable2").html(html);
                 }
-
+                $("#sortable3").html("");
                 $("#saveMappedColumns").data("excelPath", data.excelPath);
             }
         },
@@ -107,7 +129,8 @@ function showDialog(obj) {
     });
 }
 
-function saveMappedColumns() {
+function saveMappedColumns(obj) {
+    var $btn = $(obj).button("loading");
     var arr1 = new Array();
     var arr2 = new Array();
     $("#sortable1").find("li").each(function (index, ele) {
@@ -116,26 +139,41 @@ function saveMappedColumns() {
     $("#sortable2").find("li").each(function (index, ele) {
         arr2.push(ele.innerText);
     });
-    console.log($("#saveMappedColumns").data("excelPath"));
+
     $.ajax({
         url: "/api/Excel",
         type: 'POST',
-        dataType: 'json',
         data: {
             dbColumns: arr2,
             excelColumns: arr1,
             excelPath: $("#saveMappedColumns").data("excelPath")
         },
-        beforeSend: function () {
-
-        },
         success: function (data) {
-            console.log(data);
+            $btn.button('reset');
+            $('#myModal').modal('hide');
         },
-        error: function (xhr, statusText) {
-
+        error: function (xhr, statusTexth, error) {
+            console.log(error);
+            $btn.button('reset');
         }
     });
-    console.log(arr1);
-    console.log(arr2);
 }
+
+function printLabel(obj) {
+    //$("#printLabel").jqprint();
+    //var div = document.getElementById("printLabel");
+    //printdiv(div);
+
+
+    var myDoc = {
+        documents: document,
+        copyrights: '杰创软件拥有版权  www.jatools.com' // 版权声明,必须   
+    };
+    document.getElementById("printLabel").print(myDoc, true); // 直接打印，不弹出打印机设置对话框 
+
+};
+
+
+
+
+

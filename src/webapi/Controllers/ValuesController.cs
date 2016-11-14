@@ -13,6 +13,8 @@ using System.ServiceModel.Channels;
 using Microsoft.Extensions.Primitives;
 using Microsoft.Extensions.Caching.Memory;
 using webapi.Bussiness;
+using Microsoft.Extensions.Logging;
+using Exceptionless;
 
 namespace webapi.Controllers
 {
@@ -24,16 +26,20 @@ namespace webapi.Controllers
 
         private IHostingEnvironment _environment;
         private IMemoryCache _caching;
+        private ILogger<ValuesController> _logger;
         private string FileNamesKey = "fileNames";
-        public ValuesController(IHostingEnvironment environment, IMemoryCache caching)
+        public ValuesController(IHostingEnvironment environment, IMemoryCache caching,ILogger<ValuesController> logger)
         {
             _environment = environment;
             _caching = caching;
+            _logger = logger;
         }
 
         [HttpGet("{fileName}")]
         public JsonResult Get(string fileName)
         {
+            //_logger.LogInformation("查询文件");
+            ExceptionlessClient.Default.SubmitLog("查询文件");
             List<ResponseFile> responseFiles;
             if (!_caching.TryGetValue(FileNamesKey, out responseFiles))
             {

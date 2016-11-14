@@ -76,7 +76,7 @@ namespace webapi.Bussiness
             }
         }
 
-        public IEnumerable<ProductInfo> GetExcelData(ColumnMap columnMaps)
+        private IEnumerable<ProductInfo> GetExcelData(ColumnMap columnMaps)
         {
             var mapper = new Mapper(columnMaps.ExcelPath);
 
@@ -155,7 +155,7 @@ namespace webapi.Bussiness
                         conn.Open();
                     }
                     trans = conn.BeginTransaction();
-                    conn.Execute("delete from ProductInfo where JDCode=@JDCode and BarCode=@BarCode", products, trans);
+                    conn.Execute("delete from ProductInfo where BarCode=@BarCode", products, trans);
                     conn.Execute("insert into ProductInfo(ProductNo,ColorCName,ProductImgPath,ColorEName,ProductEName,ProductCName,AUS,EU,USA,CM,Inches,BarCode,JDCode,OldJDCode) values(@ProductNo, @ColorCName,@ProductImgPath,@ColorEName,@ProductEName,@ProductCName,@AUS,@EU,@USA,@CM,@Inches,@BarCode,@JDCode,@OldJDCode)", products, trans);
                     trans.Commit();
                     return true;

@@ -9,7 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using webapi.Bussiness;
 using System.Diagnostics;
-
+using NLog.Extensions.Logging;
+using Exceptionless;
 namespace webapi
 {
     public class Startup
@@ -43,8 +44,10 @@ namespace webapi
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
-
+            loggerFactory.AddNLog();
+            env.ConfigureNLog("nlog.config");
             //app.UseMiddleware<TimeMiddleware>();
+            app.UseExceptionless("oOhnsMhN9CtUs9nXjlsEN3qkcpfbTmcSArPZGROa");
             app.UseStaticFiles();
 
             app.UseMvc((routes) =>

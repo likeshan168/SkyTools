@@ -63,7 +63,7 @@ namespace webapi.Controllers
             try
             {
                 ExcelHelper.Instance.SaveDataToDb(columnMaps, _settings.Value.DefaultConnection);
-                return Ok();
+                return Content("success");
             }
             catch (Exception ex)
             {

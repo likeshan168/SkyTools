@@ -25,11 +25,14 @@
     "Microsoft.Extensions.Caching.Abstractions": "1.0.0",
     "Npoi.Mapper": "2.0.7",
     "NPOI": "2.2.1",
-    "SharpZipLib": "0.86.0"
+    "SharpZipLib": "0.86.0",
+    "NLog.Extensions.Logging": "1.0.0-rtm-alpha4",
+    "Exceptionless.AspNetCore": "4.0.1919"
   },
 
   "tools": {
-    "Microsoft.AspNetCore.Server.IISIntegration.Tools": "1.0.0-preview2-final"
+    "Microsoft.AspNetCore.Server.IISIntegration.Tools": "1.0.0-preview2-final",
+    "Microsoft.DotNet.Watcher.Tools": "1.0.0-preview2-final"
   },
 
   "frameworks": {
@@ -61,7 +64,8 @@
       "wwwroot",
       "**/*.cshtml",
       "appsettings.json",
-      "web.config"
+      "web.config",
+      "nlog.config"
     ]
   },
 
