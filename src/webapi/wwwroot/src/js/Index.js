@@ -80,17 +80,6 @@ $(function () {
                         var ob = $(o);
                         ob.tooltip({ html: true, title: "<img src='" + ob.attr('src') + "' width='180' height='180'/>", placement: "right" });
                     });
-
-                    var options = {
-                        format: "CODE128",
-                        displayValue: true,
-                        fontSize: 18,
-                        height: 100
-                    };
-                    //$(".text-primary").each(function (index, ele) {
-                    //    //console.log();
-                    //    $(ele).JsBarcode($(ele).attr('alt'), options);
-                    //});
                 },
                 error: function (xhr, statusText, error) {
                     console.log(error);
@@ -104,17 +93,56 @@ $(function () {
         connectWith: ".connectedSortable"
     }).disableSelection();
 
-    $("#printArea,#template").sortable({
-        connectWith: ".printLabel"
-    });
-    //$("#sortable2").sortable().disableSelection();
+    //$("#printArea,#template").sortable({
+    //    connectWith: ".printLabel"
+    //});
+
 
     $("#inputBarCode").keyup(function (e) {
         if (e.keyCode == 13) {
             var obj = $(this);
-            alert(obj.val());
+            //alert(obj.val());
+            if ($.trim(obj.val()) === "") {
+                return;
+            }
+            var templateId = $("#template").val();
+            $.ajax({
+                url: '/api/label/' + obj.val(),
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    var html;
+                    var $barCodeImg
+                    if (templateId === "1") {
 
-            //$("#printArea").;
+                        html = tmpl($("#template-smallLabel").html().toString(), data);
+                    } else if (templateId === "2") {
+
+                        html = tmpl($("#template-bigLabel").html().toString(), data);
+                    }
+                    $("#printArea").html(html);
+                    var options = {
+                        format: "CODE128",
+                        displayValue: true,
+                        //fontSize: 24,
+                        fontOptions:"bold"
+                        //height: 50,
+                        //width: 105
+                    };
+                    if (templateId === "1") {
+                        $barCodeImg = $("#smallBarCode");
+                    } else if (templateId === "2") {
+                        $barCodeImg = $("#bigBarCode");
+                    }
+                    console.log($barCodeImg.attr('alt'));
+                    $barCodeImg.JsBarcode($barCodeImg.attr('alt'), options);
+
+
+                },
+                error: function (xhr, statusText, err) {
+
+                }
+            });
         }
     });
 });

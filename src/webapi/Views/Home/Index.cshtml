@@ -141,7 +141,7 @@
                         </div>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="printLabel">
-                       
+
                         <div class="container-fluid">
                             <div class="col-sm-10 text-center">
                                 <input type="text" class="form-control" id="inputBarCode" placeholder="条形码">
@@ -158,89 +158,11 @@
                                 <div class="col-sm-6 printLabel" id="printArea">
 
                                 </div>
-                                <div class="col-sm-6 printLabel" id="template">
-                                    <div class="smallContainer">
-                                        <table style="margin:0 auto;">
-                                            <tr>
-                                                <td height="45" colspan="2"><img src="~/src/images/Logo.jpg" width="86" height="45" /></td>
-                                                <td width="165" colspan="7" rowspan="2"><img src="~/src/images/barCode.png" width="165" height="58" /></td>
-                                            </tr>
-                                            <tr>
-                                                <td height="20" colspan="9" class="productName">UGG BUTTON BOOTS（LEOPARD  PRINT）</td>
-                                            </tr>
-                                            <tr>
-                                                <td height="20" colspan="2" class="productColor">OB013L/CHOCOLATE</td>
-                                                <td colspan="7" rowspan="2">
-                                                    <table width="165" class="smallSizeTable">
-                                                        <tr>
-                                                            <td><div>AUS</div></td>
-                                                            <td><div>EU</div></td>
-                                                            <td><div>USA</div></td>
-                                                            <td><div>CM</div></td>
-                                                            <td><div>INCHES</div></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td><div>6M/8M</div></td>
-                                                            <td><div>40.5</div></td>
-                                                            <td><div>7/8B</div></td>
-                                                            <td><div>24.8</div></td>
-                                                            <td><div>9.76</div></td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td style="text-align:center"><img src="~/src/images/shoe.png" width="50" height="50" /></td>
-                                                <td width="22" class="smallSize">36</td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                    <div class="bigContainer">
-                                        <table style="margin:0 auto;">
-                                            <tr>
-                                                <td height="50" colspan="2"><img src="~/src/images/Logo.jpg" width="105" height="50" /></td>
-                                                <td width="201" colspan="6" rowspan="2"><img src="~/src/images/barCode.png" width="210" height="65" /></td>
-                                            </tr>
-                                            <tr>
-                                                <td height="20" colspan="8" class="productName">UGG BUTTON BOOTS（LEOPARD  PRINT）</td>
-                                            </tr>
-                                            <tr>
-                                                <td height="20" colspan="2" class="productColor">产地：中国广东</td>
-                                                <td colspan="6" rowspan="2">
-                                                    <table width="210" class="sizeTable">
-                                                        <tr>
-                                                            <td width="40"><div>AUS</div></td>
-                                                            <td width="40"><div>EU</div></td>
-                                                            <td width="40"><div>USA</div></td>
-                                                            <td width="40"><div>CM</div></td>
-                                                            <td width="40"><div>INCHES</div></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td><div>6M/8M</div></td>
-                                                            <td><div>40.5</div></td>
-                                                            <td><div>7/8B</div></td>
-                                                            <td><div>24.8</div></td>
-                                                            <td><div>9.76</div></td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td width="80" rowspan="4"><img src="~/src/images/shoe.png" width="80" height="80" /></td>
-                                                <td width="44" class="colorCName">咖啡色豹纹</td>
-                                            </tr>
-                                            <tr>
-                                                <td width="44" rowspan="3" class="bigSize">36</td>
-                                                <td height="10" colspan="6" class="address">代理商:北京群冠国际贸易有限公司</td>
-                                            </tr>
-                                            <tr>
-                                                <td height="10" colspan="6" class="address">地&nbsp;&nbsp;址:北京市朝阳区第三置业大厦A座2901</td>
-                                            </tr>
-                                            <tr>
-                                                <td height="10" colspan="6" class="address">电&nbsp;&nbsp;话:010-58221273</td>
-                                            </tr>
-                                        </table>
-                                    </div>
+                                <div class="col-sm-6 printLabel" >
+                                    <select class="form-control" id="template">
+                                        <option value="1">4cm*7cm</option>
+                                        <option value="2">5cm*7cm</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -523,6 +445,92 @@
             </td>
         </tr>
         {% } %}
+    </script>
+    <script id="template-smallLabel" type="text/x-tmpl">
+        <div class="smallContainer">
+            <table style="margin:0 auto;">
+                <tr>
+                    <td height="45" colspan="2"><img src="/src/images/Logo.jpg" width="86" height="45" /></td>
+                    <td width="165" colspan="7" rowspan="2"><img id="smallBarCode" alt="{%=o.barCode%}" width="165" height="58" /></td>
+                </tr>
+                <tr>
+                    <td height="20" colspan="9" class="productName">{%=o.productEName%}</td>
+                </tr>
+                <tr>
+                    <td height="20" colspan="2" class="productColor">{%=o.productNo%}/{%=o.colorEName%}</td>
+                    <td colspan="7" rowspan="2">
+                        <table width="165" class="smallSizeTable">
+                            <tr>
+                                <td><div>AUS</div></td>
+                                <td><div>EU</div></td>
+                                <td><div>USA</div></td>
+                                <td><div>CM</div></td>
+                                <td><div>INCHES</div></td>
+                            </tr>
+                            <tr>
+                                <td><div>{%=o.aus%}</div></td>
+                                <td><div>{%=o.eu%}</div></td>
+                                <td><div>{%=o.usa%}</div></td>
+                                <td><div>{%=o.cm%}</div></td>
+                                <td><div>{%=o.inches%}</div></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align:center"><img src="/Uploads/{%=o.productImgPath%}.jpg" width="50" height="50" /></td>
+                    <td width="22" class="smallSize">{%=o.eU%}</td>
+                </tr>
+            </table>
+        </div>
+    </script>
+    <script id="template-bigLabel" type="text/x-tmpl">
+        <div class="bigContainer">
+            <table style="margin:0 auto;">
+                <tr>
+                    <td height="50" colspan="2"><img src="/src/images/Logo.jpg" width="105" height="50" /></td>
+                    <td width="201" colspan="6" rowspan="2"><img id="bigBarCode" alt="{%=o.jdCode%}" width="210" height="65" /></td>
+                </tr>
+                <tr>
+                    <td height="20" colspan="8" class="productName">{%=o.productCName%}</td>
+                </tr>
+                <tr>
+                    <td height="20" colspan="2" class="productColor">产地：中国广东</td>
+                    <td colspan="6" rowspan="2">
+                        <table width="210" class="sizeTable">
+                            <tr>
+                                <td width="40"><div>AUS</div></td>
+                                <td width="40"><div>EU</div></td>
+                                <td width="40"><div>USA</div></td>
+                                <td width="40"><div>CM</div></td>
+                                <td width="40"><div>INCHES</div></td>
+                            </tr>
+                            <tr>
+                                <td><div>{%=o.aus%}</div></td>
+                                <td><div>{%=o.eu%}</div></td>
+                                <td><div>{%=o.usa%}</div></td>
+                                <td><div>{%=o.cm%}</div></td>
+                                <td><div>{%=o.inches%}</div></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="80" rowspan="4"><img src="/Uploads/{%=o.productImgPath%}.jpg" width="80" height="80" /></td>
+                    <td width="44" class="colorCName">{%=o.colorCName%}</td>
+                </tr>
+                <tr>
+                    <td width="44" rowspan="3" class="bigSize">{%=o.eU%}</td>
+                    <td height="10" colspan="6" class="address">代理商:北京群冠国际贸易有限公司</td>
+                </tr>
+                <tr>
+                    <td height="10" colspan="6" class="address">地&nbsp;&nbsp;址:北京市朝阳区第三置业大厦A座2901</td>
+                </tr>
+                <tr>
+                    <td height="10" colspan="6" class="address">电&nbsp;&nbsp;话:010-58221273</td>
+                </tr>
+            </table>
+        </div>
     </script>
 </body>
 </html>
