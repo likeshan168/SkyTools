@@ -112,9 +112,9 @@ body {
         border-radius: 50%;
     }
 
-#sortable1, #sortable2,#sortable3 {
+#sortable1, #sortable2, #sortable3 {
     border: 1px solid #ff6a00;
-    width: 200px;
+    width: 20px;
     min-height: 250px;
     list-style-type: none;
     margin: 0;
@@ -123,7 +123,7 @@ body {
     margin-right: 10px;
 }
 
-    #sortable1 li, #sortable2 li,#sortable3 li {
+    #sortable1 li, #sortable2 li, #sortable3 li {
         margin: 0 5px 5px 5px;
         padding: 5px;
         font-size: 12px;
@@ -134,4 +134,107 @@ body {
     position: absolute;
     top: 25px;
     left: 230px;
+}
+
+/**
+标签模板的样式
+*/
+
+
+.bigContainer {
+    overflow: hidden;
+    height: 5cm;
+    width: 9cm;
+    border: 2px dotted black;
+    margin: 0 auto;
+    /*text-align:center;*/
+}
+
+.smallContainer {
+    overflow: hidden;
+    height: 4cm;
+    width: 7cm;
+    border: 2px dotted black;
+    /*text-align:center;*/
+    margin: 0 auto;
+}
+
+.sizeTable {
+    font-size: 12px;
+    text-align: center;
+    font-weight: bold;
+    border-left: 1px solid black;
+    border-top: 1px solid black;
+    border-collapse: collapse;
+    border-spacing: 0px;
+}
+
+.smallSizeTable {
+    font-size: 11px;
+    text-align: center;
+    font-weight: bold;
+    border-left: 1px solid black;
+    border-top: 1px solid black;
+    border-collapse: collapse;
+    border-spacing: 0px;
+}
+
+    .sizeTable td, .smallSizeTable td {
+        border-right: 1px solid black;
+        border-bottom: 1px solid black;
+    }
+
+    .sizeTable div, .smallSizeTable div {
+        height: 35px;
+        text-align: center;
+        line-height: 35px;
+        vertical-align: middle;
+    }
+    .smallSizeTable div {
+        height: 38px;
+        text-align: center;
+        line-height: 38px;
+        vertical-align: middle;
+    }
+
+.productName {
+    font-size: 9px;
+    font-weight: bold;
+    vertical-align: bottom;
+}
+
+.productColor {
+    font-size: 9px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.bigSize {
+    font-weight: bold;
+    font-size: 25px;
+}
+
+.smallSize {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.address {
+    font-size: 10px;
+}
+
+.colorCName {
+    font-size: 12px;
+    font-weight: bold;
+}
+
+
+/**
+打印区域
+*/
+
+.printLabel{
+    border:2px dotted green;
+    height:10cm;
+    width:12cm;
 }

@@ -141,14 +141,108 @@
                         </div>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="printLabel">
-                        <div id="printLabel">
-                            <div>test</div>
-                            <div>test</div>
-                            <div>test</div>
-                            <div>test</div>
-                        </div>
-                        <div>
-                            <button type="button" class="btn btn-primary" onclick="printLabel(this);">打印</button>
+                       
+                        <div class="container-fluid">
+                            <div class="col-sm-10 text-center">
+                                <input type="text" class="form-control" id="inputBarCode" placeholder="条形码">
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 text-center text-danger">根据实际需求将打印模板拖入到打印区域</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6 text-center text-info">打印区域</div>
+                                <div class="col-sm-6 text-center text-info">打印模板</div>
+                            </div>
+                            <div class="row">
+
+                                <div class="col-sm-6 printLabel" id="printArea">
+
+                                </div>
+                                <div class="col-sm-6 printLabel" id="template">
+                                    <div class="smallContainer">
+                                        <table style="margin:0 auto;">
+                                            <tr>
+                                                <td height="45" colspan="2"><img src="~/src/images/Logo.jpg" width="86" height="45" /></td>
+                                                <td width="165" colspan="7" rowspan="2"><img src="~/src/images/barCode.png" width="165" height="58" /></td>
+                                            </tr>
+                                            <tr>
+                                                <td height="20" colspan="9" class="productName">UGG BUTTON BOOTS（LEOPARD  PRINT）</td>
+                                            </tr>
+                                            <tr>
+                                                <td height="20" colspan="2" class="productColor">OB013L/CHOCOLATE</td>
+                                                <td colspan="7" rowspan="2">
+                                                    <table width="165" class="smallSizeTable">
+                                                        <tr>
+                                                            <td><div>AUS</div></td>
+                                                            <td><div>EU</div></td>
+                                                            <td><div>USA</div></td>
+                                                            <td><div>CM</div></td>
+                                                            <td><div>INCHES</div></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><div>6M/8M</div></td>
+                                                            <td><div>40.5</div></td>
+                                                            <td><div>7/8B</div></td>
+                                                            <td><div>24.8</div></td>
+                                                            <td><div>9.76</div></td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align:center"><img src="~/src/images/shoe.png" width="50" height="50" /></td>
+                                                <td width="22" class="smallSize">36</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="bigContainer">
+                                        <table style="margin:0 auto;">
+                                            <tr>
+                                                <td height="50" colspan="2"><img src="~/src/images/Logo.jpg" width="105" height="50" /></td>
+                                                <td width="201" colspan="6" rowspan="2"><img src="~/src/images/barCode.png" width="210" height="65" /></td>
+                                            </tr>
+                                            <tr>
+                                                <td height="20" colspan="8" class="productName">UGG BUTTON BOOTS（LEOPARD  PRINT）</td>
+                                            </tr>
+                                            <tr>
+                                                <td height="20" colspan="2" class="productColor">产地：中国广东</td>
+                                                <td colspan="6" rowspan="2">
+                                                    <table width="210" class="sizeTable">
+                                                        <tr>
+                                                            <td width="40"><div>AUS</div></td>
+                                                            <td width="40"><div>EU</div></td>
+                                                            <td width="40"><div>USA</div></td>
+                                                            <td width="40"><div>CM</div></td>
+                                                            <td width="40"><div>INCHES</div></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><div>6M/8M</div></td>
+                                                            <td><div>40.5</div></td>
+                                                            <td><div>7/8B</div></td>
+                                                            <td><div>24.8</div></td>
+                                                            <td><div>9.76</div></td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td width="80" rowspan="4"><img src="~/src/images/shoe.png" width="80" height="80" /></td>
+                                                <td width="44" class="colorCName">咖啡色豹纹</td>
+                                            </tr>
+                                            <tr>
+                                                <td width="44" rowspan="3" class="bigSize">36</td>
+                                                <td height="10" colspan="6" class="address">代理商:北京群冠国际贸易有限公司</td>
+                                            </tr>
+                                            <tr>
+                                                <td height="10" colspan="6" class="address">地&nbsp;&nbsp;址:北京市朝阳区第三置业大厦A座2901</td>
+                                            </tr>
+                                            <tr>
+                                                <td height="10" colspan="6" class="address">电&nbsp;&nbsp;话:010-58221273</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -225,8 +319,8 @@
     <script src="~/lib/blueimp-file-upload/js/jquery.fileupload-validate.js"></script>
     <!-- The File Upload user interface plugin -->
     <script src="~/lib/blueimp-file-upload/js/jquery.fileupload-ui.js"></script>    <!-- The main application script -->
-    @*<script src="~/lib/jquery-print/jquery-migrate-1.2.1.min.js"></script>
-    <script src="~/lib/jquery-print/jquery.jqprint-0.3.js"></script>*@
+    <script src="~/lib/JsBarcode/JsBarcode.all.min.js"></script>
+    <script src='http://localhost:8000/CLodopfuncs.js'></script>
     <script src="~/src/js/Index.js"></script>
 
 
@@ -384,7 +478,7 @@
                 {%=i+1%}
             </td>
             <td>
-                <img src="/Uploads/{%=value.productImgPath%}.jpg" width="64" height="64" class="img-thumbnail" />
+                <img alt="未找到图片" src="/Uploads/{%=value.productImgPath%}.jpg" width="64" height="64" class="img-thumbnail" />
             </td>
             <td>
                 {%=value.productNo%}
@@ -417,7 +511,9 @@
                 {%=value.inches%}
             </td>
             <td>
-                {%=value.barCode%}
+                @*<img class="barCode" alt="{%=value.barCode%}" />*@
+                @*{%=value.barCode%}*@
+                <span class="text-primary">{%=value.barCode%}</span>
             </td>
             <td>
                 {%=value.jdCode%}

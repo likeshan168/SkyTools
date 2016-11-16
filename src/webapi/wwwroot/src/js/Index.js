@@ -81,22 +81,42 @@ $(function () {
                         ob.tooltip({ html: true, title: "<img src='" + ob.attr('src') + "' width='180' height='180'/>", placement: "right" });
                     });
 
-                    //$(".img-thumbnail").tooltip({html:true,title: "<img src='"+obj.attr('src')+"' width='180' height='180'/>", placement:"right" });
+                    var options = {
+                        format: "CODE128",
+                        displayValue: true,
+                        fontSize: 18,
+                        height: 100
+                    };
+                    //$(".text-primary").each(function (index, ele) {
+                    //    //console.log();
+                    //    $(ele).JsBarcode($(ele).attr('alt'), options);
+                    //});
                 },
                 error: function (xhr, statusText, error) {
                     console.log(error);
                 }
             });
         }
-
-
     })
 
 
     $("#sortable1,#sortable2,#sortable3").sortable({
         connectWith: ".connectedSortable"
     }).disableSelection();
+
+    $("#printArea,#template").sortable({
+        connectWith: ".printLabel"
+    });
     //$("#sortable2").sortable().disableSelection();
+
+    $("#inputBarCode").keyup(function (e) {
+        if (e.keyCode == 13) {
+            var obj = $(this);
+            alert(obj.val());
+
+            //$("#printArea").;
+        }
+    });
 });
 
 function showDialog(obj) {
@@ -160,17 +180,10 @@ function saveMappedColumns(obj) {
 }
 
 function printLabel(obj) {
-    //$("#printLabel").jqprint();
-    //var div = document.getElementById("printLabel");
-    //printdiv(div);
-
-
-    var myDoc = {
-        documents: document,
-        copyrights: '杰创软件拥有版权  www.jatools.com' // 版权声明,必须   
-    };
-    document.getElementById("printLabel").print(myDoc, true); // 直接打印，不弹出打印机设置对话框 
-
+    /*1. 初始化打印任务*/
+    LODOP.PRINT_INIT("sky-faith打印标签任务");
+    /*2. 设定纸张的大小和打印的方向*/
+    LODOP.SET_PRINT_PAGESIZE(1, "4cm", "7cm", "");
 };
 
 
