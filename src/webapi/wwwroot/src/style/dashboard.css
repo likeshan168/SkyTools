@@ -185,9 +185,9 @@ body {
     }
 
     .sizeTable div, .smallSizeTable div {
-        height: 35px;
+        height: 32px;
         text-align: center;
-        line-height: 35px;
+        line-height: 32px;
         vertical-align: middle;
     }
     .smallSizeTable div {

@@ -12,7 +12,6 @@ $(function () {
         url: 'api/Values/',
         autoUpload: true
     });
-
     // Enable iframe cross-domain access via redirect option:
     $('#fileupload').fileupload(
         'option',
@@ -22,7 +21,7 @@ $(function () {
             '/cors/result.html?%s'
         )
     );
-
+    //查询基础数据或者图片文件等功能函数
     $("#search").keyup(function (e) {
         var obj = $(this);
         if ($.trim(obj.val()).length === 0) {
@@ -87,17 +86,11 @@ $(function () {
             });
         }
     })
-
-
+    //初始化excel列和数据库列为可拖曳
     $("#sortable1,#sortable2,#sortable3").sortable({
         connectWith: ".connectedSortable"
     }).disableSelection();
-
-    //$("#printArea,#template").sortable({
-    //    connectWith: ".printLabel"
-    //});
-
-
+    //扫描标签，显示模板并调用模板标签打印的方法
     $("#inputBarCode").keyup(function (e) {
         if (e.keyCode == 13) {
             var obj = $(this);
@@ -110,43 +103,73 @@ $(function () {
                 url: '/api/label/' + obj.val(),
                 type: 'GET',
                 dataType: 'json',
+                beforeSend: function () {
+                    $("#labelMsg").removeClass("hide").html("正在获取数据...").show();
+                },
                 success: function (data) {
-                    var html;
-                    var $barCodeImg
-                    if (templateId === "1") {
+                    if (data) {
+                        var html;
+                        var $barCodeImg
+                        if (templateId === "1") {
+                            html = tmpl($("#template-smallLabel").html().toString(), data);
+                        } else if (templateId === "2") {
 
-                        html = tmpl($("#template-smallLabel").html().toString(), data);
-                    } else if (templateId === "2") {
-
-                        html = tmpl($("#template-bigLabel").html().toString(), data);
+                            html = tmpl($("#template-bigLabel").html().toString(), data);
+                        }
+                        $("#printArea").html(html);
+                        var options = {
+                            format: "CODE128",
+                            displayValue: true,
+                            //fontSize: 24,
+                            fontOptions: "bold"
+                            //height: 50,
+                            //width: 105
+                        };
+                        if (templateId === "1") {
+                            $barCodeImg = $("#smallBarCode");
+                        } else if (templateId === "2") {
+                            $barCodeImg = $("#bigBarCode");
+                        }
+                        $barCodeImg.JsBarcode($barCodeImg.attr('alt'), options);
+                        $("#labelMsg").html("正在打印...");
+                        //打印标签
+                        printLabel(templateId);
                     }
-                    $("#printArea").html(html);
-                    var options = {
-                        format: "CODE128",
-                        displayValue: true,
-                        //fontSize: 24,
-                        fontOptions:"bold"
-                        //height: 50,
-                        //width: 105
-                    };
-                    if (templateId === "1") {
-                        $barCodeImg = $("#smallBarCode");
-                    } else if (templateId === "2") {
-                        $barCodeImg = $("#bigBarCode");
-                    }
-                    console.log($barCodeImg.attr('alt'));
-                    $barCodeImg.JsBarcode($barCodeImg.attr('alt'), options);
-
-
                 },
                 error: function (xhr, statusText, err) {
-
+                    $("#labelMsg").html("获取数据出错").hide();
                 }
             });
         }
     });
+    //初始化基础数据可配置列
+    var content = '<table class="table table-striped table-condensed table-hover">' +
+                      '<thead' +
+                      '<tr>' +
+                        '<th>列表显示条目</th>' +
+                        '<th>恢复默认设置</th>' +
+                      '</tr>' +
+                      '</thead>' +
+                      '<tbody>' +
+                      '<tr><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="1">鞋图</label></div></td><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="2">货号</label></div></td></tr>' +
+                      '<tr><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="3">颜色</label></div></td><td><div class="checkbox"><label><input type="checkbox" value="4">英文颜色</label></div></td></tr>' +
+                      '<tr><td><div class="checkbox"><label><input type="checkbox" value="5">英文名称</label></div></td><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="6">中文名称</label></div></td></tr>' +
+                      '<tr><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="7">AUS</label></div></td><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="8">EU</label></div></td></tr>' +
+                      '<tr><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="9">USA</label></div></td><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="10">CM</label></div></td></tr>' +
+                      '<tr><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="11">Inches</label></div></td><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="12">条形码</label></div></td></tr>' +
+                      '<tr><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="13">京东码</label></div></td><td><div class="checkbox"><label><input type="checkbox" value="14">旧京东码</label></div></td></tr>' +
+                      '</tbody>' +
+                  '</table>';
+    $("#configProductColumn").popover({
+        html: true,
+        content: content,
+        placement: "left",
+        //template: "<div class='popover'></div>"
+        template: '<div class="popover" role="tooltip" ><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content" width="300px;"></div></div>'
+    });
 });
 
+//配置excel与数据库列的对应关系
 function showDialog(obj) {
     $('#myModal').modal('show');
     //获取excel的列名
@@ -176,7 +199,7 @@ function showDialog(obj) {
         }
     });
 }
-
+//保存excel与数据库列的对应关系
 function saveMappedColumns(obj) {
     var $btn = $(obj).button("loading");
     var arr1 = new Array();
@@ -206,12 +229,30 @@ function saveMappedColumns(obj) {
         }
     });
 }
-
-function printLabel(obj) {
+//打印标签功能函数
+function printLabel(templateId) {
+    var LODOP = getCLodop();
     /*1. 初始化打印任务*/
     LODOP.PRINT_INIT("sky-faith打印标签任务");
+
+    var style = "<link href='/src/style/PrintLabel.css' type='text/css' rel='stylesheet'>";
+    //var html = style + "<body>" + document.getElementById("printArea").innerHTML + "</body>";
+    var html;
     /*2. 设定纸张的大小和打印的方向*/
-    LODOP.SET_PRINT_PAGESIZE(1, "4cm", "7cm", "");
+    if (templateId === "1") {
+        //LODOP.SET_PRINT_PAGESIZE(1, "7cm", "4cm", "");
+        html = style + "<body>" + $(".smallContainer").html() + "</body>";
+        LODOP.ADD_PRINT_HTM(0, 0, "7cm", "4cm", html);
+
+    } else if (templateId === "2") {
+        //LODOP.SET_PRINT_PAGESIZE(1, "9cm", "5cm", "");
+        html = style + "<body>" + $(".bigContainer").html() + "</body>";
+        LODOP.ADD_PRINT_HTM(0, 0, "9cm", "5cm", html);
+    }
+    //LODOP.PRINT();
+    LODOP.PREVIEW();
+    $("#labelMsg").html("打印完成").hide(2000);
+
 };
 
 

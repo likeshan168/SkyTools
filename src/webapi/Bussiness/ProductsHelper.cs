@@ -30,5 +30,18 @@ namespace webapi.Bussiness
                 return conn.Query<ProductInfo>($"select * from ProductInfo where ProductNo like '%{word}%' or ProductCName like '%{word}%' or ProductEName like '%{word}%' or BarCode like '%{word}%' or JDCode like '%{word}%'");
             }
         }
+
+        public ProductInfo GetProductInfo(string barCode, string connStr)
+        {
+            using (IDbConnection conn = new SqlConnection(connStr))
+            {
+                if (conn.State == ConnectionState.Closed)
+                {
+                    conn.Open();
+                }
+
+                return conn.Query<ProductInfo>("select * from ProductInfo where BarCode =@BarCode or JDCode = @BarCode or OldJDCode=@BarCode", new { BarCode = barCode }).FirstOrDefault();
+            }
+        }
     }
 }

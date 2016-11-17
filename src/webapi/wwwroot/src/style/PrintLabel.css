@@ -1,0 +1,86 @@
+﻿.bigContainer {
+    overflow: hidden;
+    height: 5cm;
+    width: 9cm;
+    border: 2px dotted black;
+    margin: 0 auto;
+    /*text-align:center;*/
+}
+
+.smallContainer {
+    overflow: hidden;
+    height: 4cm;
+    width: 7cm;
+    border: 2px dotted black;
+    /*text-align:center;*/
+    margin: 0 auto;
+}
+
+.sizeTable {
+    font-size: 12px;
+    text-align: center;
+    font-weight: bold;
+    border-left: 1px solid black;
+    border-top: 1px solid black;
+    border-collapse: collapse;
+    border-spacing: 0px;
+}
+
+.smallSizeTable {
+    font-size: 11px;
+    text-align: center;
+    font-weight: bold;
+    border-left: 1px solid black;
+    border-top: 1px solid black;
+    border-collapse: collapse;
+    border-spacing: 0px;
+}
+
+    .sizeTable td, .smallSizeTable td {
+        border-right: 1px solid black;
+        border-bottom: 1px solid black;
+    }
+
+    .sizeTable div, .smallSizeTable div {
+        height: 32px;
+        text-align: center;
+        line-height: 32px;
+        vertical-align: middle;
+    }
+    .smallSizeTable div {
+        height: 38px;
+        text-align: center;
+        line-height: 38px;
+        vertical-align: middle;
+    }
+
+.productName {
+    font-size: 9px;
+    font-weight: bold;
+    vertical-align: bottom;
+}
+
+.productColor {
+    font-size: 9px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.bigSize {
+    font-weight: bold;
+    font-size: 25px;
+}
+
+.smallSize {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.address {
+    font-size: 10px;
+}
+
+.colorCName {
+    font-size: 12px;
+    font-weight: bold;
+}

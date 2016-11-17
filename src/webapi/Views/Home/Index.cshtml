@@ -9,7 +9,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../favicon.ico">
 
-    <title>Dashboard Template for Bootstrap</title>
+    <title>标签打印</title>
     <!-- Bootstrap core CSS -->
 
     <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
@@ -72,6 +72,10 @@
             <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
                 <div class="tab-content">
                     <div class="table-responsive active tab-pane" role="tabpanel" id="home">
+                        <div class="text-right">
+                            @*<button class="btn btn-default" type="button" id="refreshProductInfo"><i class="glyphicon glyphicon-refresh"></i></button>*@
+                            <button class="btn btn-default" type="button" id="configProductColumn"><i class="glyphicon glyphicon-cog"></i></button>
+                        </div>
                         <table class="table table-striped table-condensed table-hover">
                             <thead>
                                 <tr>
@@ -79,8 +83,8 @@
                                     <th>鞋图</th>
                                     <th>货号</th>
                                     <th>颜色</th>
-                                    <th>英文颜色</th>
-                                    <th>英文名称</th>
+                                    @*<th>英文颜色</th>
+                                    <th>英文名称</th>*@
                                     <th>中文名称</th>
                                     <th>AUS</th>
                                     <th>EU</th>
@@ -89,7 +93,7 @@
                                     <th>Inches</th>
                                     <th>条形码</th>
                                     <th>京东码</th>
-                                    <th>旧京东码</th>
+                                    @*<th>旧京东码</th>*@
                                 </tr>
                             </thead>
                             <tbody id="productInfo"></tbody>
@@ -141,7 +145,7 @@
                         </div>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="printLabel">
-
+                        <div class="alert alert-success hide" role="alert" id="labelMsg"></div>
                         <div class="container-fluid">
                             <div class="col-sm-10 text-center">
                                 <input type="text" class="form-control" id="inputBarCode" placeholder="条形码">
@@ -158,10 +162,10 @@
                                 <div class="col-sm-6 printLabel" id="printArea">
 
                                 </div>
-                                <div class="col-sm-6 printLabel" >
+                                <div class="col-sm-6 printLabel">
                                     <select class="form-control" id="template">
                                         <option value="1">4cm*7cm</option>
-                                        <option value="2">5cm*7cm</option>
+                                        <option value="2">5cm*9cm</option>
                                     </select>
                                 </div>
                             </div>
@@ -451,7 +455,7 @@
             <table style="margin:0 auto;">
                 <tr>
                     <td height="45" colspan="2"><img src="/src/images/Logo.jpg" width="86" height="45" /></td>
-                    <td width="165" colspan="7" rowspan="2"><img id="smallBarCode" alt="{%=o.barCode%}" width="165" height="58" /></td>
+                    <td width="165" colspan="7" rowspan="2">@*<img id="smallBarCode" alt="{%=o.barCode%}" width="165" height="58" />*@<img src="/src/images/barCode.png" alt="{%=o.barCode%}" width="165" height="58" /></td>
                 </tr>
                 <tr>
                     <td height="20" colspan="9" class="productName">{%=o.productEName%}</td>
@@ -524,10 +528,10 @@
                     <td height="10" colspan="6" class="address">代理商:北京群冠国际贸易有限公司</td>
                 </tr>
                 <tr>
-                    <td height="10" colspan="6" class="address">地&nbsp;&nbsp;址:北京市朝阳区第三置业大厦A座2901</td>
+                    <td height="10" colspan="6" class="address">地&nbsp;&nbsp;&nbsp;&nbsp;址:北京市朝阳区第三置业大厦A座2901</td>
                 </tr>
                 <tr>
-                    <td height="10" colspan="6" class="address">电&nbsp;&nbsp;话:010-58221273</td>
+                    <td height="10" colspan="6" class="address">电&nbsp;&nbsp;&nbsp;&nbsp;话:010-58221273</td>
                 </tr>
             </table>
         </div>
