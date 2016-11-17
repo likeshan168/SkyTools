@@ -151,21 +151,53 @@ $(function () {
                       '</tr>' +
                       '</thead>' +
                       '<tbody>' +
-                      '<tr><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="1">鞋图</label></div></td><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="2">货号</label></div></td></tr>' +
-                      '<tr><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="3">颜色</label></div></td><td><div class="checkbox"><label><input type="checkbox" value="4">英文颜色</label></div></td></tr>' +
-                      '<tr><td><div class="checkbox"><label><input type="checkbox" value="5">英文名称</label></div></td><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="6">中文名称</label></div></td></tr>' +
-                      '<tr><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="7">AUS</label></div></td><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="8">EU</label></div></td></tr>' +
-                      '<tr><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="9">USA</label></div></td><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="10">CM</label></div></td></tr>' +
-                      '<tr><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="11">Inches</label></div></td><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="12">条形码</label></div></td></tr>' +
-                      '<tr><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="13">京东码</label></div></td><td><div class="checkbox"><label><input type="checkbox" value="14">旧京东码</label></div></td></tr>' +
+                      '<tr><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="1" onclick="ConfigProductColumn(this);">鞋图</label></div></td><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="2" onclick="ConfigProductColumn(this);">货号</label></div></td></tr>' +
+                      '<tr><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="3" onclick="ConfigProductColumn(this);">颜色</label></div></td><td><div class="checkbox"><label><input type="checkbox" value="4" onclick="ConfigProductColumn(this);">英文颜色</label></div></td></tr>' +
+                      '<tr><td><div class="checkbox"><label><input type="checkbox" value="5" onclick="ConfigProductColumn(this);">英文名称</label></div></td><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="6" onclick="ConfigProductColumn(this);">中文名称</label></div></td></tr>' +
+                      '<tr><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="7" onclick="ConfigProductColumn(this);">AUS</label></div></td><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="8" onclick="ConfigProductColumn(this);">EU</label></div></td></tr>' +
+                      '<tr><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="9" onclick="ConfigProductColumn(this);">USA</label></div></td><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="10" onclick="ConfigProductColumn(this);">CM</label></div></td></tr>' +
+                      '<tr><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="11" onclick="ConfigProductColumn(this);">Inches</label></div></td><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="12" onclick="ConfigProductColumn(this);">条形码</label></div></td></tr>' +
+                      '<tr><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="13" onclick="ConfigProductColumn(this);">京东码</label></div></td><td><div class="checkbox"><label><input type="checkbox" value="14" onclick="ConfigProductColumn(this);">旧京东码</label></div></td></tr>' +
                       '</tbody>' +
                   '</table>';
-    $("#configProductColumn").popover({
-        html: true,
-        content: content,
-        placement: "left",
-        //template: "<div class='popover'></div>"
-        template: '<div class="popover" role="tooltip" ><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content" width="300px;"></div></div>'
+    //$("#configProductColumn").popover({
+    //    html: true,
+    //    content: content,
+    //    placement: "left",
+    //    //trigger: "focus ",
+    //    //template: "<div class='popover'></div>"
+    //    template: '<div class="popover" role="tooltip" ><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content" width="300px;"></div></div>'
+    //});
+    $("#configColumnDialog").dialog({
+        autoOpen: false,
+        show: {
+            effect: "blind",
+            duration: 1000
+        },
+        hide: {
+            effect: "explode",
+            duration: 1000
+        },
+        modal: true,
+        buttons: [
+            {
+                text: "Ok",
+                icons: {
+                    primary: "ui-icon-heart"
+                },
+                click: function () {
+                    $(this).dialog("close");
+                }
+
+                // Uncommenting the following line would hide the text,
+                // resulting in the label being used as a tooltip
+                //showText: false
+            }
+        ]
+    });
+
+    $("#configProductColumn").click(function () {
+        $("#configColumnDialog").removeClass("fade modal").dialog("open");
     });
 });
 
@@ -255,6 +287,18 @@ function printLabel(templateId) {
 
 };
 
+//添加，删除基础信息列
+function ConfigProductColumn(obj) {
+    var $obj = $(obj);
+    if ($obj.is(":checked")) {
+        $("#productTb tr th:eq(" + $obj.val() + ")").show();
+        $("#productTb tr td:nth-child(" + $obj.val() + ")").show();
+    } else {
+        $("#productTb tr th:eq(" + $obj.val() + ")").hide();
+        $("#productTb tr td:nth-child(" + $obj.val() + ")").hide();
+    }
+
+}
 
 
 

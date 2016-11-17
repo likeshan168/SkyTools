@@ -76,15 +76,15 @@
                             @*<button class="btn btn-default" type="button" id="refreshProductInfo"><i class="glyphicon glyphicon-refresh"></i></button>*@
                             <button class="btn btn-default" type="button" id="configProductColumn"><i class="glyphicon glyphicon-cog"></i></button>
                         </div>
-                        <table class="table table-striped table-condensed table-hover">
+                        <table id="productTb" class="table table-striped table-condensed table-hover">
                             <thead>
                                 <tr>
                                     <th>序号</th>
                                     <th>鞋图</th>
                                     <th>货号</th>
                                     <th>颜色</th>
-                                    @*<th>英文颜色</th>
-                                    <th>英文名称</th>*@
+                                    <th>英文颜色</th>
+                                    <th>英文名称</th>
                                     <th>中文名称</th>
                                     <th>AUS</th>
                                     <th>EU</th>
@@ -93,7 +93,7 @@
                                     <th>Inches</th>
                                     <th>条形码</th>
                                     <th>京东码</th>
-                                    @*<th>旧京东码</th>*@
+                                    <th>旧京东码</th>
                                 </tr>
                             </thead>
                             <tbody id="productInfo"></tbody>
@@ -221,7 +221,29 @@
         </div>
     </div>
 
-    <div></div>
+    <div id="configColumnDialog" class="modal fade">
+        <table class="table table-striped table-condensed table-hover">
+            <thead>
+                <tr>
+                    <th>列表显示条目</th>
+                    <th>恢复默认设置</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="1" onclick="ConfigProductColumn(this);">鞋图</label></div></td><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="2" onclick="ConfigProductColumn(this);">货号</label></div></td></tr>
+                <tr><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="3" onclick="ConfigProductColumn(this);">颜色</label></div></td><td><div class="checkbox"><label><input type="checkbox" value="4" onclick="ConfigProductColumn(this);">英文颜色</label></div></td></tr>
+                <tr><td><div class="checkbox"><label><input type="checkbox" value="5" onclick="ConfigProductColumn(this);">英文名称</label></div></td><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="6" onclick="ConfigProductColumn(this);">中文名称</label></div></td></tr>
+                <tr><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="7" onclick="ConfigProductColumn(this);">AUS</label></div></td><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="8" onclick="ConfigProductColumn(this);">EU</label></div></td></tr>
+                <tr>
+                    <td><div class="checkbox"><label><input type="checkbox" checked="checked" value="9" onclick="ConfigProductColumn(this);">USA</label></div></td>
+
+                    <td><div class="checkbox"><label><input type="checkbox" checked="checked" value="10" onclick="ConfigProductColumn(this);">CM</label></div></td>
+                </tr>
+                <tr><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="11" onclick="ConfigProductColumn(this);">Inches</label></div></td><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="12" onclick="ConfigProductColumn(this);">条形码</label></div></td></tr>
+                <tr><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="13" onclick="ConfigProductColumn(this);">京东码</label></div></td><td><div class="checkbox"><label><input type="checkbox" value="14" onclick="ConfigProductColumn(this);">旧京东码</label></div></td></tr>' +
+            </tbody>
+        </table>
+    </div>
 
     <script src="~/lib/jquery/dist/jquery.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
