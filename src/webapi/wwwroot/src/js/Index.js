@@ -168,36 +168,9 @@ $(function () {
     //    //template: "<div class='popover'></div>"
     //    template: '<div class="popover" role="tooltip" ><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content" width="300px;"></div></div>'
     //});
-    $("#configColumnDialog").dialog({
-        autoOpen: false,
-        show: {
-            effect: "blind",
-            duration: 1000
-        },
-        hide: {
-            effect: "explode",
-            duration: 1000
-        },
-        modal: true,
-        buttons: [
-            {
-                text: "Ok",
-                icons: {
-                    primary: "ui-icon-heart"
-                },
-                click: function () {
-                    $(this).dialog("close");
-                }
-
-                // Uncommenting the following line would hide the text,
-                // resulting in the label being used as a tooltip
-                //showText: false
-            }
-        ]
-    });
 
     $("#configProductColumn").click(function () {
-        $("#configColumnDialog").removeClass("fade modal").dialog("open");
+        $("#configColumnDialog").modal('show');
     });
 });
 
@@ -290,16 +263,25 @@ function printLabel(templateId) {
 //添加，删除基础信息列
 function ConfigProductColumn(obj) {
     var $obj = $(obj);
+    var num = parseInt($obj.val());
+    //console.log($("#productTb tr td:nth-child(" + $obj.val() + ")").text());
     if ($obj.is(":checked")) {
-        $("#productTb tr th:eq(" + $obj.val() + ")").show();
-        $("#productTb tr td:nth-child(" + $obj.val() + ")").show();
+        $("#productTb tr th:eq(" + num + ")").show();
+        $("#productTb tr td:nth-child(" + (num + 1) + ")").show();
     } else {
-        $("#productTb tr th:eq(" + $obj.val() + ")").hide();
-        $("#productTb tr td:nth-child(" + $obj.val() + ")").hide();
+        $("#productTb tr th:eq(" + num + ")").hide();
+        $("#productTb tr td:nth-child(" + (num + 1) + ")").hide();
     }
 
 }
 
-
-
+//恢复基础信息列的默认配置
+function recoverConfig() {
+    //$("#colsTable input[type='checkbox']").each(function (index, ele) {
+    //    console.log(ele);
+    //    $(ele).attr("checked", "checked");
+    //});
+    $("#productTb tr th").show();
+    $("#productTb tr td").show();
+}
 

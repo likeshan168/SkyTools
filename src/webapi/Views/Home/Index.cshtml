@@ -221,28 +221,39 @@
         </div>
     </div>
 
-    <div id="configColumnDialog" class="modal fade">
-        <table class="table table-striped table-condensed table-hover">
-            <thead>
-                <tr>
-                    <th>列表显示条目</th>
-                    <th>恢复默认设置</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="1" onclick="ConfigProductColumn(this);">鞋图</label></div></td><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="2" onclick="ConfigProductColumn(this);">货号</label></div></td></tr>
-                <tr><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="3" onclick="ConfigProductColumn(this);">颜色</label></div></td><td><div class="checkbox"><label><input type="checkbox" value="4" onclick="ConfigProductColumn(this);">英文颜色</label></div></td></tr>
-                <tr><td><div class="checkbox"><label><input type="checkbox" value="5" onclick="ConfigProductColumn(this);">英文名称</label></div></td><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="6" onclick="ConfigProductColumn(this);">中文名称</label></div></td></tr>
-                <tr><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="7" onclick="ConfigProductColumn(this);">AUS</label></div></td><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="8" onclick="ConfigProductColumn(this);">EU</label></div></td></tr>
-                <tr>
-                    <td><div class="checkbox"><label><input type="checkbox" checked="checked" value="9" onclick="ConfigProductColumn(this);">USA</label></div></td>
-
-                    <td><div class="checkbox"><label><input type="checkbox" checked="checked" value="10" onclick="ConfigProductColumn(this);">CM</label></div></td>
-                </tr>
-                <tr><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="11" onclick="ConfigProductColumn(this);">Inches</label></div></td><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="12" onclick="ConfigProductColumn(this);">条形码</label></div></td></tr>
-                <tr><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="13" onclick="ConfigProductColumn(this);">京东码</label></div></td><td><div class="checkbox"><label><input type="checkbox" value="14" onclick="ConfigProductColumn(this);">旧京东码</label></div></td></tr>' +
-            </tbody>
-        </table>
+    <div class="modal fade" id="configColumnDialog" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog dialogCenter">
+            <div class="modal-content modal-lg">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel">列表显示条目</h4>
+                </div>
+                <div class="modal-body">
+                    <table id="colsTable" class="table table-striped table-condensed table-hover">
+                        @*<thead>
+                            <tr>
+                                <th colspan="2" class="text-center"><a href="#" onclick="recoverConfig();"><i class="glyphicon glyphicon-repeat"></i>恢复默认设置</a></th>
+                            </tr>
+                        </thead>*@
+                        <tbody>
+                            <tr><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="1" onclick="ConfigProductColumn(this);">鞋图</label></div></td><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="2" onclick="ConfigProductColumn(this);">货号</label></div></td></tr>
+                            <tr><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="3" onclick="ConfigProductColumn(this);">颜色</label></div></td><td><div class="checkbox"><label><input type="checkbox" value="4" checked="checked" onclick="ConfigProductColumn(this);">英文颜色</label></div></td></tr>
+                            <tr><td><div class="checkbox"><label><input type="checkbox" value="5" checked="checked" onclick="ConfigProductColumn(this);">英文名称</label></div></td><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="6" onclick="ConfigProductColumn(this);">中文名称</label></div></td></tr>
+                            <tr><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="7" onclick="ConfigProductColumn(this);">AUS</label></div></td><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="8" onclick="ConfigProductColumn(this);">EU</label></div></td></tr>
+                            <tr>
+                                <td><div class="checkbox"><label><input type="checkbox" checked="checked" value="9" onclick="ConfigProductColumn(this);">USA</label></div></td>
+                                <td><div class="checkbox"><label><input type="checkbox" checked="checked" value="10" onclick="ConfigProductColumn(this);">CM</label></div></td>
+                            </tr>
+                            <tr><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="11" onclick="ConfigProductColumn(this);">Inches</label></div></td><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="12" onclick="ConfigProductColumn(this);">条形码</label></div></td></tr>
+                            <tr><td><div class="checkbox"><label><input type="checkbox" checked="checked" value="13" onclick="ConfigProductColumn(this);">京东码</label></div></td><td><div class="checkbox"><label><input type="checkbox" value="14" checked="checked" onclick="ConfigProductColumn(this);">旧京东码</label></div></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="~/lib/jquery/dist/jquery.js"></script>
